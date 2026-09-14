@@ -2,7 +2,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from yt_converter import download
+from yt_converter import download, resolve_output_dir
 
 
 st.set_page_config(page_title="YT Converter", page_icon="🎵", layout="centered")
@@ -56,9 +56,10 @@ if download_clicked:
         target = Path(output_dir)
         with st.spinner("Downloading and converting..."):
             try:
-                download(url=url.strip(), file_format=file_format, output_dir=str(target))
-                st.success(f"Done! Saved into: {target.resolve()}")
-                files = sorted(target.glob("*"))
+                safe_target = resolve_output_dir(str(target))
+                download(url=url.strip(), file_format=file_format, output_dir=str(safe_target))
+                st.success(f"Done! Saved into: {safe_target}")
+                files = sorted(safe_target.glob("*"))
                 if files:
                     st.write("Recent files:")
                     for item in files[-10:]:

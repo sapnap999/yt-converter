@@ -2,6 +2,25 @@ import argparse
 from pathlib import Path
 
 
+BASE_DOWNLOAD_DIR = Path.cwd().resolve()
+
+
+def resolve_output_dir(output_dir: str) -> Path:
+    candidate = Path(output_dir).expanduser()
+    if not candidate.is_absolute():
+        candidate = BASE_DOWNLOAD_DIR / candidate
+
+    resolved = candidate.resolve(strict=False)
+    try:
+        resolved.relative_to(BASE_DOWNLOAD_DIR)
+    except ValueError as exc:
+        raise ValueError(
+            f"Output directory must stay inside: {BASE_DOWNLOAD_DIR}"
+        ) from exc
+
+    return resolved
+
+
 def build_ydl_options(file_format: str, output_dir: str) -> dict:
     output_template = str(Path(output_dir) / "%(title)s.%(ext)s")
     options = {
@@ -60,8 +79,11 @@ def parse_args() -> argparse.Namespace:
 def download(url: str, file_format: str, output_dir: str) -> None:
     from yt_dlp import YoutubeDL
 
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
-    ydl_options = build_ydl_options(file_format=file_format, output_dir=output_dir)
+    safe_output_dir = resolve_output_dir(output_dir)
+    safe_output_dir.mkdir(parents=True, exist_ok=True)
+    ydl_options = build_ydl_options(
+        file_format=file_format, output_dir=str(safe_output_dir)
+    )
 
     with YoutubeDL(ydl_options) as ydl:
         ydl.download([url])
