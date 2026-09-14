@@ -1,6 +1,8 @@
 # yt-converter
 
 Small CLI utility to convert/download a YouTube URL as either **MP3** or **MP4**.
+- MP3 downloads target high audio quality (320 kbps conversion).
+- MP4 downloads target at least 720p with best available audio.
 
 ## Setup
 

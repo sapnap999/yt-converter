@@ -17,7 +17,7 @@ def build_ydl_options(file_format: str, output_dir: str) -> dict:
                     {
                         "key": "FFmpegExtractAudio",
                         "preferredcodec": "mp3",
-                        "preferredquality": "192",
+                        "preferredquality": "320",
                     }
                 ],
             }
@@ -25,7 +25,10 @@ def build_ydl_options(file_format: str, output_dir: str) -> dict:
     elif file_format == "mp4":
         options.update(
             {
-                "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+                "format": (
+                    "bestvideo[height>=720][ext=mp4]+bestaudio[ext=m4a]/"
+                    "bestvideo[height>=720]+bestaudio/best[height>=720]"
+                ),
                 "merge_output_format": "mp4",
             }
         )
