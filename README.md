@@ -14,6 +14,14 @@ python -m pip install -r requirements.txt
 
 ## Usage
 
+### Friendly UI (recommended)
+
+```bash
+streamlit run /home/runner/work/yt-converter/yt-converter/ui.py
+```
+
+This opens a polished local web UI where you can paste a YouTube link, choose MP3/MP4, and download.
+
 Download as MP3:
 
 ```bash
