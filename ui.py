@@ -45,7 +45,7 @@ st.markdown(
 st.markdown('<div class="glass-card">', unsafe_allow_html=True)
 url = st.text_input("YouTube URL", placeholder="https://www.youtube.com/watch?v=...")
 file_format = st.selectbox("Format", options=("mp3", "mp4"), index=0)
-output_dir = st.text_input("Output folder", value="downloads")
+output_dir = st.text_input("Output folder name", value="downloads")
 
 download_clicked = st.button("⬇️ Convert & Download", type="primary", use_container_width=True)
 

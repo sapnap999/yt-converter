@@ -21,7 +21,7 @@ streamlit run /home/runner/work/yt-converter/yt-converter/ui.py
 ```
 
 This opens a polished local web UI where you can paste a YouTube link, choose MP3/MP4, and download.
-For safety, output folders are restricted to paths inside this repository directory.
+For safety, output is always written inside this repository directory using the folder name you enter.
 
 Download as MP3:
 

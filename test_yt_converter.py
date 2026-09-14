@@ -1,5 +1,4 @@
 import unittest
-from pathlib import Path
 
 from yt_converter import BASE_DOWNLOAD_DIR, build_ydl_options, resolve_output_dir
 
@@ -32,10 +31,11 @@ class ResolveOutputDirTests(unittest.TestCase):
         resolved = resolve_output_dir("downloads")
         self.assertEqual(resolved, (BASE_DOWNLOAD_DIR / "downloads").resolve())
 
-    def test_absolute_path_outside_base_directory_is_rejected(self) -> None:
-        outside = str(Path("/tmp/yt-converter-test-outside"))
-        with self.assertRaises(ValueError):
-            resolve_output_dir(outside)
+    def test_unsafe_characters_are_sanitized(self) -> None:
+        resolved = resolve_output_dir("../tmp/new folder")
+        self.assertEqual(
+            resolved, (BASE_DOWNLOAD_DIR / "tmp_new_folder").resolve()
+        )
 
 
 if __name__ == "__main__":

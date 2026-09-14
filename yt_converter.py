@@ -1,4 +1,5 @@
 import argparse
+import re
 from pathlib import Path
 
 
@@ -6,19 +7,10 @@ BASE_DOWNLOAD_DIR = Path.cwd().resolve()
 
 
 def resolve_output_dir(output_dir: str) -> Path:
-    candidate = Path(output_dir).expanduser()
-    if not candidate.is_absolute():
-        candidate = BASE_DOWNLOAD_DIR / candidate
-
-    resolved = candidate.resolve(strict=False)
-    try:
-        resolved.relative_to(BASE_DOWNLOAD_DIR)
-    except ValueError as exc:
-        raise ValueError(
-            f"Output directory must stay inside: {BASE_DOWNLOAD_DIR}"
-        ) from exc
-
-    return resolved
+    folder_name = re.sub(r"[^A-Za-z0-9._-]+", "_", output_dir).strip("._")
+    if not folder_name:
+        folder_name = "downloads"
+    return (BASE_DOWNLOAD_DIR / folder_name).resolve(strict=False)
 
 
 def build_ydl_options(file_format: str, output_dir: str) -> dict:
